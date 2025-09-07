@@ -20,8 +20,8 @@ def create_synthesis_prompt(cas_number: str) -> str:
     return f'''
 Find the top 3 most cited peer-reviewed journal articles that describe experimental procedures for synthesizing exactly the compound with CAS number {cas_number}. Do NOT include derivatives, analogs, or substituted versions.
 
-**Required output format is as follows. The format is computer-readable; do not bold or italicize any text, and output nothing but what's specified here, no prologue or epilogue.**
-**Article 1: [Full Citation]**
+**Required output format is as follows. The format is computer-readable; do not bold or italicize any text, and output nothing but what's specified here, no prologue or epilogue. The summary ends in two newlines.**
+Article 1: [Full Citation]
 - Journal: [Journal Name, Year, Volume, Pages]
 - Citation Count: [Number of citations]
 - DOI: [Digital Object Identifier if available]
@@ -33,8 +33,9 @@ Find the top 3 most cited peer-reviewed journal articles that describe experimen
 - Experimental Method: [Write as a single paragraph describing the complete procedure as reported in the original paper]
 - Yield: [Reported yield percentage]
 
-**Article 2: [Repeat same format]**
-**Article 3: [Repeat same format]**
+Article 2: [Repeat same format]
+
+Article 3: [Repeat same format]
 
 **STRICT Search Constraints:**
 - **TARGET COMPOUND ONLY**: The exact compound with the CAS number described with NO structural modifications
@@ -106,7 +107,7 @@ def parse_synthesis_response(response_text: str) -> List[Dict]:
     articles = []
     
     # Split response by article sections
-    article_sections = re.split(r'\*\*Article \d+:', response_text)
+    article_sections = re.split(r'Article \d+:', response_text)
     
     for i, section in enumerate(article_sections[1:], 1):  # Skip first empty section
         try:
@@ -174,13 +175,13 @@ def parse_synthesis_response(response_text: str) -> List[Dict]:
             if yield_match:
                 article_data['yield'] = yield_match.group(1).strip()
             
-            # Extract experimental method as summary
-            method_match = re.search(r'Experimental Method:\s*([^\n]+(?:\n(?!\*\*)[^\n]*)*)', section)
+            # Extract experimental method as summary (stop at double-newline)
+            method_match = re.search(r'Experimental Method:\s*((?:.|\n)*?)(?:\n\n|$)', section)
             if method_match:
                 article_data['source']['summary'] = method_match.group(1).strip()
             
             # Try to extract title from the citation
-            citation_match = re.search(r'\*\*Article {i}:\s*([^\n]+)'.format(i=i), response_text)
+            citation_match = re.search(r'Article {i}:\s*([^\n]+)'.format(i=i), response_text)
             if citation_match:
                 article_data['source']['title'] = citation_match.group(1).strip()
             
