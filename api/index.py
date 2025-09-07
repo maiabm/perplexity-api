@@ -20,7 +20,7 @@ def create_synthesis_prompt(cas_number: str) -> str:
     return f'''
 Find the top 3 most cited peer-reviewed journal articles that describe experimental procedures for synthesizing exactly the compound with CAS number {cas_number}. Do NOT include derivatives, analogs, or substituted versions.
 
-**Required output format is as follows. The format is computer-readable; do not bold or italicize any text, and output nothing but what's specified here, no prologue or epilogue. The summary ends in two newlines.**
+**Required output format is as follows. The format is computer-readable; do not bold or italicize any text, and output nothing but what's specified here, no prologue or epilogue. The experimental method ends in two newlines.**
 Article 1: [Full Citation]
 - Journal: [Journal Name, Year, Volume, Pages]
 - Citation Count: [Number of citations]
@@ -30,8 +30,8 @@ Article 1: [Full Citation]
 - Starting Materials: [List all reagents]
 - Solvents: [Specify all solvents used]
 - Reaction Conditions: [Temperature, time, atmosphere, pressure if specified]
-- Experimental Method: [Write as a single paragraph describing the complete procedure as reported in the original paper]
 - Yield: [Reported yield percentage]
+- Experimental Method: [Write as a single paragraph describing the complete procedure as reported in the original paper]
 
 Article 2: [Repeat same format]
 
