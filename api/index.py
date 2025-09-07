@@ -18,9 +18,9 @@ PERPLEXITY_API_URL = 'https://api.perplexity.ai/chat/completions'
 def create_synthesis_prompt(cas_number: str) -> str:
     """Create a structured prompt for Perplexity AI to find synthesis information."""
     return f'''
-Find the top 3 most cited peer-reviewed journal articles that describe experimental procedures for synthesizing **exactly the compound with CAS number {cas_number}**. **Do NOT include derivatives, analogs, or substituted versions.**
+Find the top 3 most cited peer-reviewed journal articles that describe experimental procedures for synthesizing exactly the compound with CAS number {cas_number}. Do NOT include derivatives, analogs, or substituted versions.
 
-**Required Output Format:**
+**Required output format is as follows. The format is computer-readable; do not bold or italicize any text, and output nothing but what's specified here, no prologue or epilogue.**
 **Article 1: [Full Citation]**
 - Journal: [Journal Name, Year, Volume, Pages]
 - Citation Count: [Number of citations]
@@ -49,8 +49,8 @@ Find the top 3 most cited peer-reviewed journal articles that describe experimen
 **Quality Requirements:**
 - Provide exact experimental details for the single synthetic transformation
 - Include temperatures and reaction times
-- **Ensure all starting materials are commercially available** (no pre-synthesized intermediates)
-- **Verify each procedure represents a direct conversion** to the target compound that has the CAS number listed above
+- Ensure all starting materials are commercially available (no pre-synthesized intermediates)
+- Verify each procedure represents a direct conversion to the target compound that has the CAS number listed above
 - Exclude any procedure requiring preliminary reactions or protective group chemistry
 - Verify that each citation is from a different research group/institution
 
